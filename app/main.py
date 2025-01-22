@@ -3,7 +3,7 @@ import platform
 from fastapi import FastAPI
 from app.scheduler import schedule_tasks
 from app.routers import crawling
-from playwright._impl._installer import install_default_browsers
+from playwright.sync_api import sync_playwright
 
 app = FastAPI()
 
@@ -12,7 +12,10 @@ app = FastAPI()
 async def setup_playwright():
     """서버 시작 시 Playwright 브라우저 설치"""
     print("Playwright 브라우저 설치 중...")
-    await asyncio.to_thread(install_default_browsers)
+    def install_browsers():
+        with sync_playwright() as p:
+            p.chromium.launch(headless=True)  # Chromium 브라우저 설치
+    await asyncio.to_thread(install_browsers)
     print("Chromium 설치 완료.")
 
 # 스케줄 작업 등록
