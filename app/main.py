@@ -1,6 +1,9 @@
+import asyncio
+import platform
 from fastapi import FastAPI
 from app.scheduler import schedule_tasks
 from app.routers import crawling
+from playwright.__main__ import main as playwright_install
 
 app = FastAPI()
 
