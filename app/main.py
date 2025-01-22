@@ -10,10 +10,10 @@ app = FastAPI()
 # Playwright 설치
 @app.on_event("startup")
 async def setup_playwright():
-    """서버 실행 시 Playwright 브라우저 바이너리 설치"""
+    """서버 시작 시 Playwright 브라우저 설치"""
     print("Playwright 브라우저 설치 중...")
-    asyncio.create_task(asyncio.to_thread(playwright_install, ["install"]))
-    print("Playwright 설치 완료.")
+    asyncio.create_task(asyncio.to_thread(playwright_install, ["install", "chromium"]))
+    print("Chromium 설치 완료.")
 
 # 스케줄 작업 등록
 # @app.on_event("startup")
