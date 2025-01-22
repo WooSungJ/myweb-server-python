@@ -4,11 +4,19 @@ from app.routers import crawling
 
 app = FastAPI()
 
-# 스케줄 작업 등록
+# Playwright 설치
 @app.on_event("startup")
-def startup_event():
-    """애플리케이션 시작 시 스케줄 작업 등록"""
-    schedule_tasks()
+async def setup_playwright():
+    """서버 실행 시 Playwright 브라우저 바이너리 설치"""
+    print("Playwright 브라우저 설치 중...")
+    asyncio.create_task(asyncio.to_thread(playwright_install, ["install"]))
+    print("Playwright 설치 완료.")
+
+# 스케줄 작업 등록
+# @app.on_event("startup")
+# def startup_event():
+#     """애플리케이션 시작 시 스케줄 작업 등록"""
+#     schedule_tasks()
 
 # 라우터 등록
 app.include_router(crawling.router)
