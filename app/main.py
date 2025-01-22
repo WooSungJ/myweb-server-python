@@ -1,5 +1,6 @@
 import asyncio
-import platform
+import os
+import subprocess
 from fastapi import FastAPI
 from app.scheduler import schedule_tasks
 from app.routers import crawling
@@ -10,14 +11,12 @@ app = FastAPI()
 async def setup_playwright():
     """서버 시작 시 Playwright 브라우저 설치"""
     print("Playwright 브라우저 설치 중...")
-
-    def install_browsers():
-        from playwright.__main__ import main as playwright_main
-        playwright_main(["install"])  # 모든 브라우저 설치
-
-    # 비동기로 브라우저 설치 실행
-    await asyncio.to_thread(install_browsers)
-    print("Playwright 브라우저 설치 완료.")
+    # Playwright 브라우저 설치 확인 및 필요시 설치
+    if not os.path.exists(os.path.expanduser("~/.cache/ms-playwright")):
+        subprocess.run(["playwright", "install", "chromium"], check=True)
+        print("Chromium 설치 완료.")
+    else:
+        print("Chromium 이미 설치됨.")
 
 # 스케줄 작업 등록
 # @app.on_event("startup")
